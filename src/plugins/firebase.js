@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueFire from 'vuefire';
 import { initializeApp } from 'firebase/app';
+import 'firebase/firestore';
 
 const config = {
   apiKey: 'AIzaSyCY-9mPf0I_91juKitXcJFlYCtHRjzIw5Q',
@@ -9,6 +10,15 @@ const config = {
   projectId: 'slimlist-19a19'
 };
 
-initializeApp(config);
+const app = initializeApp(config);
 
 Vue.use(VueFire);
+
+export default app;
+
+const db = app.firestore();
+db.settings({
+  timestampsInSnapshots: true
+});
+
+export { db };

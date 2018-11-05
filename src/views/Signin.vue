@@ -9,6 +9,7 @@
 
 <script>
 import { auth } from 'firebase/app';
+import firebaseApp from '@/plugins/firebase';
 import 'firebase/auth';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
@@ -17,6 +18,7 @@ const uiConfig = {
   signInSuccessUrl: '/',
   signInFlow: 'redirect',
   tosUrl: '/tos',
+  privacyPolicyUrl: '/privacy',
   signInOptions: [
     auth.EmailAuthProvider.PROVIDER_ID,
     auth.GoogleAuthProvider.PROVIDER_ID
@@ -38,7 +40,7 @@ export default {
       if (firebaseui.auth.AuthUI.getInstance(appId)) {
         return firebaseui.auth.AuthUI.getInstance(appId);
       } else {
-        return new firebaseui.auth.AuthUI(auth(), appId);
+        return new firebaseui.auth.AuthUI(firebaseApp.auth(), appId);
       }
     }
   }

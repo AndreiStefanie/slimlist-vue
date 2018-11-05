@@ -3,10 +3,10 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import { i18n } from './i18n';
-import './registerServiceWorker';
-import './plugins/vuetify';
-import './plugins/reactive-cookie';
-import './plugins/firebase';
+import '@/registerServiceWorker';
+import '@/plugins/vuetify';
+import '@/plugins/reactive-cookie';
+import '@/plugins/firebase';
 
 Vue.config.productionTip = false;
 

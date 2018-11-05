@@ -37,5 +37,10 @@ export default [
     path: '/signin',
     name: 'signin',
     component: loadView('Signin')
+  },
+  {
+    path: '/tos',
+    name: 'tos',
+    component: loadView('Terms')
   }
 ];

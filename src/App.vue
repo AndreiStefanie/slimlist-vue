@@ -1,5 +1,5 @@
 <template>
-  <v-app id="keep">
+  <v-app :dark="$store.state.app.dark">
     <Drawer/>
     <Header/>
     <v-content>
@@ -24,10 +24,8 @@ export default {
 };
 </script>
 
-<style lang="stylus">
-#keep {
-  .v-navigation-drawer__border {
-    display: none;
-  }
+<style>
+html {
+  overflow: auto !important;
 }
 </style>
