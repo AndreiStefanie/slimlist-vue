@@ -42,5 +42,15 @@ export default [
     path: '/tos',
     name: 'tos',
     component: loadView('Terms')
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: loadView('Privacy')
+  },
+  {
+    path: '/list/:id',
+    name: 'list',
+    component: loadView('List')
   }
 ];

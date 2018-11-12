@@ -17,7 +17,7 @@
       ></v-text-field>
     </v-layout>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn v-if="!loggedIn" flat to="signin">SIGN IN</v-btn>
+      <v-btn v-if="!loggedIn" flat to="/signin">SIGN IN</v-btn>
       <v-menu
         v-if="loggedIn"
         bottom

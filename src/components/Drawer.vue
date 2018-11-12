@@ -3,61 +3,66 @@
     v-model="$store.state.app.showDrawer"
     fixed
     clipped
-    class="grey lighten-4"
     app
   >
-    <v-list
-      dense
-      class="grey lighten-4"
-    >
-      <template v-for="(item, i) in items">
-        <v-layout
-          v-if="item.heading"
-          :key="i"
-          row
-          align-center
-        >
-          <v-flex xs6>
-            <v-subheader v-if="item.heading">
-              {{ item.heading }}
-            </v-subheader>
-          </v-flex>
-          <v-flex xs6 class="text-xs-right">
-            <v-btn small flat>edit</v-btn>
-          </v-flex>
-        </v-layout>
-        <v-divider
-          v-else-if="item.divider"
-          :key="i"
-          dark
-          class="my-3"
-        ></v-divider>
-        <v-list-tile
-          v-else
-          :key="i"
-          @click="()=>{}"
-        >
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
+    <v-list>
+      <v-list-tile to="/">
+        <v-list-tile-action>
+          <v-icon>home</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title>Home</v-list-tile-title>
+      </v-list-tile>
+
+      <v-list-group
+        prepend-icon="list"
+        value="true"
+        no-action
+        v-if="loggedIn"
+      >
+        <v-list-tile slot="activator">
           <v-list-tile-content>
-            <v-list-tile-title class="grey--text">
-              {{ item.text }}
-            </v-list-tile-title>
+            <v-list-tile-title>Lists</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-      </template>
+
+        <v-list-tile v-for="t in todos" :key="t.type" :to="`/list/${t.id}`">
+          <v-list-tile-content>
+            <v-list-tile-title>{{ t.type }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
+import { db } from '@/plugins/firebase';
+import { mapGetters } from 'vuex';
+
 export default {
+  name: 'Drawer',
   data() {
     return {
       drawer: false,
-      items: [{ icon: 'list', text: 'Lists' }]
+      todos: []
     };
+  },
+  computed: {
+    ...mapGetters({ loggedIn: 'user/loggedIn', user: 'user/user' })
+  },
+  watch: {
+    user: {
+      immediate: true,
+      handler(newUser) {
+        if (newUser && newUser.uid) {
+          this.$bind(
+            'todos',
+            db.collection('todo-lists').where('owner', '==', this.user.uid)
+          );
+        }
+      }
+    }
   }
 };
 </script>

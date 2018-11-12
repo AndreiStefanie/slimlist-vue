@@ -24,7 +24,7 @@
           <v-card color="blue-grey darken-2" class="white--text">
             <v-layout>
               <v-flex xs8>
-                <v-card-title primary-title>
+                <v-card-title primary-title :to="`/list/${t.id}`">
                   <div>
                     <div class="headline">{{ t.type }}</div>
                     <div>{{ getProgress(t) }}</div>
@@ -102,8 +102,18 @@ export default {
       fab: false
     };
   },
-  firestore: {
-    todos: todos
+  watch: {
+    user: {
+      immediate: true,
+      handler: function(newUser) {
+        if (newUser && newUser.uid) {
+          this.$bind(
+            'todos',
+            db.collection('todo-lists').where('owner', '==', this.user.uid)
+          );
+        }
+      }
+    }
   },
   computed: {
     ...mapGetters({ loggedIn: 'user/loggedIn', user: 'user/user' })
@@ -140,6 +150,7 @@ export default {
           completed: false,
           type: this.selectedTodo.type,
           owner: this.user.uid,
+          public: false,
           todos: []
         });
       }
