@@ -25,7 +25,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile v-for="t in todos" :key="t.type" :to="`/list/${t.id}`">
+        <v-list-tile v-for="t in todos" :key="t.id" :to="`/list/${t.id}`">
           <v-list-tile-content>
             <v-list-tile-title>{{ t.type }}</v-list-tile-title>
           </v-list-tile-content>
@@ -37,32 +37,21 @@
 </template>
 
 <script>
-import { db } from '@/plugins/firebase';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Drawer',
   data() {
     return {
-      drawer: false,
-      todos: []
+      drawer: false
     };
   },
   computed: {
-    ...mapGetters({ loggedIn: 'user/loggedIn', user: 'user/user' })
-  },
-  watch: {
-    user: {
-      immediate: true,
-      handler(newUser) {
-        if (newUser && newUser.uid) {
-          this.$bind(
-            'todos',
-            db.collection('todo-lists').where('owner', '==', this.user.uid)
-          );
-        }
-      }
-    }
+    ...mapGetters({
+      loggedIn: 'user/loggedIn',
+      user: 'user/user',
+      todos: 'todo/lists'
+    })
   }
 };
 </script>

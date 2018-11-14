@@ -4,7 +4,7 @@
     clipped-left
     scroll-off-screen>
     <v-toolbar-side-icon @click.native="toggleDrawer"></v-toolbar-side-icon>
-    <span class="title ml-3 mr-5">Slim&nbsp;<span class="font-weight-light">List</span></span>
+    <router-link to="/" tag="span"><span class="title ml-3 mr-5">Slim&nbsp;<span class="font-weight-light">List</span></span></router-link>
     <v-spacer></v-spacer>
     <v-layout row align-center style="max-width: 600px" class="hidden-sm-and-down" mr-2>
       <v-text-field
@@ -121,5 +121,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.title:hover {
+  cursor: pointer;
+}
 </style>

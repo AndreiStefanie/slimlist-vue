@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import modules from './modules';
+import { firebaseMutations } from 'vuexfire';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  mutations: firebaseMutations,
   modules
 });
 

@@ -20,7 +20,7 @@
       grid-list-lg
     >
       <v-layout row wrap>
-        <v-flex xs12 v-for="t in todos" :key="t.type">
+        <v-flex xs12 v-for="t in todos" :key="t.id">
           <v-card color="blue-grey darken-2" class="white--text">
             <v-layout>
               <v-flex xs8>
@@ -34,8 +34,8 @@
             </v-layout>
             <v-divider light></v-divider>
             <v-card-actions class="pa-3 blue-grey darken-3">
-              <v-icon color="white" @click="editTodo(t)">edit</v-icon>
-              <v-icon color="white" @click="deleteTodo(t)">delete</v-icon>
+              <span class="mr-2 ml-2"><v-icon color="white" @click="editTodo(t)">edit</v-icon></span>
+              <span class="mr-2 ml-2"><v-icon color="white" @click="deleteTodo(t)">delete</v-icon></span>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -94,7 +94,6 @@ export default {
   },
   data() {
     return {
-      todos: [],
       selectedTodo: {
         type: ''
       },
@@ -102,21 +101,12 @@ export default {
       fab: false
     };
   },
-  watch: {
-    user: {
-      immediate: true,
-      handler: function(newUser) {
-        if (newUser && newUser.uid) {
-          this.$bind(
-            'todos',
-            db.collection('todo-lists').where('owner', '==', this.user.uid)
-          );
-        }
-      }
-    }
-  },
   computed: {
-    ...mapGetters({ loggedIn: 'user/loggedIn', user: 'user/user' })
+    ...mapGetters({
+      loggedIn: 'user/loggedIn',
+      user: 'user/user',
+      todos: 'todo/lists'
+    })
   },
   methods: {
     getProgress(todo) {
