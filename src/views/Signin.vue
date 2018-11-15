@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <div class="pending" v-if="uiHandler.isPendingRedirect()">
-      Just a second
-    </div>
-    <div id="firebaseui-auth-container"></div>
-  </div>
+  <v-container grid-list-xs fill-height>
+    <v-layout row wrap>
+      <div style="margin:auto;">
+        <div class="pending" v-if="uiHandler.isPendingRedirect()">
+          Just a second
+        </div>
+        <div id="firebaseui-auth-container"></div>
+      </div>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>

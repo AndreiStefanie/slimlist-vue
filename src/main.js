@@ -7,6 +7,7 @@ import '@/registerServiceWorker';
 import '@/plugins/vuetify';
 import '@/plugins/reactive-cookie';
 import '@/plugins/firebase';
+import 'vuetify/dist/vuetify.min.css';
 
 Vue.config.productionTip = false;
 

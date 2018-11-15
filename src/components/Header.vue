@@ -56,13 +56,6 @@
           <v-list>
             <v-list-tile>
               <v-list-tile-action>
-                <v-switch v-model="liveUpdates" color="green"></v-switch>
-              </v-list-tile-action>
-              <v-list-tile-title>Enable live updates</v-list-tile-title>
-            </v-list-tile>
-
-            <v-list-tile>
-              <v-list-tile-action>
                 <v-switch v-model="hints" color="green"></v-switch>
               </v-list-tile-action>
               <v-list-tile-title>Enable hints</v-list-tile-title>
@@ -103,8 +96,7 @@ export default {
   },
   data() {
     return {
-      hints: false,
-      liveUpdates: false
+      hints: false
     };
   },
   methods: {

@@ -8,10 +8,10 @@ const runtimeOpts = {
   memory: '128MB'
 };
 
-exports.listsCreatedAt = functions
+exports.listCreatedAt = functions
   .runWith(runtimeOpts)
-  .firestore.document('todo-lists/{list-id}')
-  .onCreate(async snap => {
+  .firestore.document('todo-lists/{id}')
+  .onCreate(snap => {
     const docCreatedTimestamp = snap.createTime;
     try {
       return snap.ref.set(
@@ -26,22 +26,3 @@ exports.listsCreatedAt = functions
       return false;
     }
   });
-
-// exports.todoCreatedAt = functions
-//   .runWith(runtimeOpts)
-//   .firestore.document('todo-lists/{list-id}/todos')
-//   .onCreate(async snap => {
-//     const docCreatedTimestamp = snap.createTime;
-//     try {
-//       return snap.ref.set(
-//         {
-//           createdAt: docCreatedTimestamp
-//         },
-//         { merge: true }
-//       );
-//     } catch (error) {
-//       // eslint-disable-next-line no-console
-//       console.log(error);
-//       return false;
-//     }
-//   });

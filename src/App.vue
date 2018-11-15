@@ -3,11 +3,7 @@
     <Drawer/>
     <Header/>
     <v-content>
-      <v-container fill-height>
-        <v-layout justify-center align-center>
-          <router-view/>
-        </v-layout>
-      </v-container>
+      <router-view/>
     </v-content>
   </v-app>
 </template>
@@ -33,7 +29,10 @@ export default {
         if (newValue) {
           this.$store.dispatch(
             'todo/setTodosRef',
-            db.collection('todo-lists').where('owner', '==', this.user.uid)
+            db
+              .collection('todo-lists')
+              .where('owner', '==', this.user.uid)
+              .orderBy('createdAt', 'desc')
           );
         }
       }
@@ -42,7 +41,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import '@/styles/_layout.scss';
+
 html {
   overflow: auto !important;
 }

@@ -52,5 +52,10 @@ export default [
     path: '/list/:id',
     name: 'list',
     component: loadView('List')
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: loadView('User')
   }
 ];

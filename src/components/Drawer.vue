@@ -5,6 +5,22 @@
     clipped
     app
   >
+    <router-link to="/user" tag="span">
+      <v-toolbar v-if="loggedIn" flat class="transparent hidden-md-and-up mt-2 mb-2">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img :src="user.photoURL" alt="avatar">
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ user.displayName }}</v-list-tile-title>
+              <v-list-tile-sub-title>Member</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+    </router-link>
+    <v-divider></v-divider>
     <v-list>
       <v-list-tile to="/">
         <v-list-tile-action>

@@ -1,5 +1,5 @@
 <template>
-  <v-layout row>
+  <v-layout row mt-2>
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
         <v-list
@@ -11,30 +11,30 @@
           <v-list-tile @click="()=>{}" v-for="(t, index) in list.todos" :key="index">
             <v-list-tile-action>
               <v-checkbox
-                :value="t.done"
-                @change="setDone(index)"
+                v-model="t.done"
+                @change.capture="setDone(index)"
                 color="green"
               ></v-checkbox>
             </v-list-tile-action>
 
-            <v-list-tile-content @click.prevent="t.done!=!t.done">
+            <v-list-tile-content @click="editTodo(t)">
               <v-list-tile-title>{{ t.task }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
 
         </v-list>
-        <v-btn
-          color="blue-grey white--text"
-          dark
-          fab
-          small
-          @click="addTodo"
-        >
-          <v-icon>add</v-icon>
-        </v-btn>
       </v-card>
     </v-flex>
+    <v-btn
+      color="blue-grey white--text"
+      dark
+      fab
+      bottom right fixed
+      @click="addTodo"
+    >
+      <v-icon>add</v-icon>
+    </v-btn>
     <v-layout row justify-center v-if="!!selectedTodo">
       <v-dialog v-model="showDialog" persistent max-width="600px">
         <v-card>
@@ -64,7 +64,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn  flat @click.native="handleClose">Close</v-btn>
+            <v-btn flat @click.native="handleClose">Close</v-btn>
             <v-btn color="blue-grey white--text" @click.native="handleSave">Save</v-btn>
           </v-card-actions>
         </v-card>
@@ -79,6 +79,14 @@ import { mapGetters } from 'vuex';
 
 const todosRef = db.collection('todo-lists');
 
+const MODE_EDIT = 'edit';
+const MODE_CREATE = 'create';
+
+const initialTodo = {
+  task: '',
+  description: ''
+};
+
 export default {
   name: 'List',
   metaInfo: {
@@ -87,8 +95,9 @@ export default {
   data() {
     return {
       list: {},
-      selectedTodo: {},
-      showDialog: false
+      selectedTodo: { ...initialTodo },
+      showDialog: false,
+      mode: undefined
     };
   },
   methods: {
@@ -100,18 +109,21 @@ export default {
     },
     addTodo() {
       this.showDialog = true;
+      this.mode = MODE_CREATE;
     },
     editTodo(todo) {
       this.selectedTodo = todo;
       this.showDialog = true;
+      this.mode = MODE_EDIT;
     },
     handleClose() {
       this.showDialog = false;
-      this.selectedTodo = { task: '' };
+      this.selectedTodo = { ...initialTodo };
+      this.mode = undefined;
     },
     handleSave() {
       this.showDialog = false;
-      if (this.selectedTodo.id) {
+      if (this.mode === MODE_EDIT) {
         todosRef.doc(this.$route.params.id).update({ todos: this.list.todos });
       } else {
         this.list.todos.push({
@@ -123,7 +135,8 @@ export default {
           todos: this.list.todos
         });
       }
-      this.selectedTodo = { task: '', description: '' };
+      this.selectedTodo = { ...initialTodo };
+      this.mode = undefined;
     }
   },
   computed: {

@@ -1,37 +1,32 @@
 <template>
-  <div v-if="!loggedIn" class="w-100">
-    <v-container
-      fluid
-      fill-height
-    >
-      <v-layout column>
-        <v-flex xs12 ma-auto>
-          <h1>SlimList</h1>
-        </v-flex>
-        <v-flex xs12 ma-auto>
-          <v-btn color="info" flat centered to="signin">Signin</v-btn>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+  <v-container v-if="!loggedIn" grid-list-xs fill-height>
+    <v-layout row wrap>
+      <div style="margin:auto;">
+        <v-btn color="blue-grey white--text" large to="signin">Signin</v-btn>
+      </div>
+    </v-layout>
+  </v-container>
   <div v-else class="w-100">
     <v-container
       fluid
+      mt-2
       grid-list-lg
     >
       <v-layout row wrap>
         <v-flex xs12 v-for="t in todos" :key="t.id">
           <v-card color="blue-grey darken-2" class="white--text">
-            <v-layout>
-              <v-flex xs8>
-                <v-card-title primary-title :to="`/list/${t.id}`">
-                  <div>
-                    <div class="headline">{{ t.type }}</div>
-                    <div>{{ getProgress(t) }}</div>
-                  </div>
-                </v-card-title>
-              </v-flex>
-            </v-layout>
+            <router-link :to="`/list/${t.id}`" tag="span" style="cursor:pointer;">
+              <v-layout>
+                <v-flex xs8>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline" >{{ t.type }}</div>
+                      <div>{{ getProgress(t) }}</div>
+                    </div>
+                  </v-card-title>
+                </v-flex>
+              </v-layout>
+            </router-link>
             <v-divider light></v-divider>
             <v-card-actions class="pa-3 blue-grey darken-3">
               <span class="mr-2 ml-2"><v-icon color="white" @click="editTodo(t)">edit</v-icon></span>
@@ -40,15 +35,16 @@
           </v-card>
         </v-flex>
       </v-layout>
-      <v-btn
-        color="blue-grey white--text"
-        dark
-        fab
-        @click="addTodo"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
     </v-container>
+    <v-btn
+      color="blue-grey white--text"
+      dark
+      fab
+      bottom right fixed
+      @click="addTodo"
+    >
+      <v-icon>add</v-icon>
+    </v-btn>
     <v-layout row justify-center v-if="!!selectedTodo">
       <v-dialog v-model="showDialog" persistent max-width="600px">
         <v-card>
@@ -71,7 +67,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn  flat @click.native="handleClose">Close</v-btn>
+            <v-btn flat @click.native="handleClose">Close</v-btn>
             <v-btn color="blue-grey white--text" @click.native="handleSave">Save</v-btn>
           </v-card-actions>
         </v-card>
@@ -149,9 +145,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.w-100 {
-  width: 100%;
-}
-</style>
