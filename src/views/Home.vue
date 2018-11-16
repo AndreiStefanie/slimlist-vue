@@ -7,6 +7,26 @@
     </v-layout>
   </v-container>
   <div v-else class="w-100">
+    <v-dialog
+      hide-overlay
+      persistent
+      width="300"
+      v-if="!loaded"
+    >
+      <v-card
+        color="blue-grey darken-2"
+        dark
+      >
+        <v-card-text>
+          Getting things ready
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-container
       fluid
       mt-2
@@ -101,7 +121,8 @@ export default {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
       user: 'user/user',
-      todos: 'todo/lists'
+      todos: 'todo/lists',
+      loaded: 'todo/loaded'
     })
   },
   methods: {

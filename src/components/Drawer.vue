@@ -5,21 +5,35 @@
     clipped
     app
   >
-    <router-link to="/user" tag="span">
-      <v-toolbar v-if="loggedIn" flat class="transparent hidden-md-and-up mt-2 mb-2">
-        <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img :src="user.photoURL" alt="avatar">
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ user.displayName }}</v-list-tile-title>
-              <v-list-tile-sub-title>Member</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-    </router-link>
+    <v-toolbar v-if="loggedIn" flat class="hidden-md-and-up mt-2 mb-2" @click="userDialog=true">
+      <v-list class="pa-0">
+        <v-list-tile avatar>
+          <v-list-tile-avatar>
+            <img v-if="user.photoURL" :src="user.photoURL" alt="avatar">
+            <v-avatar
+              v-else
+              color="blue-grey"
+            >
+              <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
+            </v-avatar>
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ user.displayName }}</v-list-tile-title>
+            <v-list-tile-sub-title>Member</v-list-tile-sub-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+      <v-dialog v-model="userDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-card>
+          <v-toolbar dark color="blue-grey darken-2">
+            <v-btn icon dark @click="userDialog=false">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <User/>
+        </v-card>
+      </v-dialog>
+    </v-toolbar>
     <v-divider></v-divider>
     <v-list>
       <v-list-tile to="/">
@@ -54,12 +68,17 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import User from './User';
 
 export default {
   name: 'Drawer',
+  components: {
+    User
+  },
   data() {
     return {
-      drawer: false
+      drawer: false,
+      userDialog: false
     };
   },
   computed: {
@@ -71,6 +90,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

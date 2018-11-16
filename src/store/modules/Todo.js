@@ -1,11 +1,20 @@
 import { firebaseAction } from 'vuexfire';
 
 export const state = {
-  lists: []
+  lists: [],
+  loaded: false
 };
 
-const setTodosRef = firebaseAction(({ bindFirebaseRef }, ref) => {
-  bindFirebaseRef('lists', ref);
+export const mutations = {
+  setTodosLoaded(state, loaded) {
+    state.loaded = loaded;
+  }
+};
+
+const setTodosRef = firebaseAction(({ bindFirebaseRef, commit }, ref) => {
+  bindFirebaseRef('lists', ref).then(() => {
+    commit('setTodosLoaded', true);
+  });
 });
 
 export const actions = {
@@ -13,5 +22,6 @@ export const actions = {
 };
 
 export const getters = {
-  lists: state => state.lists
+  lists: state => state.lists,
+  loaded: state => state.loaded
 };

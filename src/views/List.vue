@@ -17,7 +17,7 @@
               ></v-checkbox>
             </v-list-tile-action>
 
-            <v-list-tile-content @click="editTodo(t)">
+            <v-list-tile-content @click="handleEdit(t)">
               <v-list-tile-title>{{ t.task }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
             </v-list-tile-content>
@@ -31,7 +31,7 @@
       dark
       fab
       bottom right fixed
-      @click="addTodo"
+      @click="handleAdd"
     >
       <v-icon>add</v-icon>
     </v-btn>
@@ -54,7 +54,8 @@
                 <v-flex xs12>
                   <v-textarea
                     label="More details"
-                    rows="3"
+                    rows="1"
+                    auto-grow
                     v-model="selectedTodo.description"
                   ></v-textarea>
                 </v-flex>
@@ -96,6 +97,7 @@ export default {
     return {
       list: {},
       selectedTodo: { ...initialTodo },
+      selectedRef: { ...initialTodo },
       showDialog: false,
       mode: undefined
     };
@@ -107,12 +109,13 @@ export default {
         todos: this.list.todos
       });
     },
-    addTodo() {
+    handleAdd() {
       this.showDialog = true;
       this.mode = MODE_CREATE;
     },
-    editTodo(todo) {
-      this.selectedTodo = todo;
+    handleEdit(todo) {
+      this.selectedTodo = { ...todo };
+      this.selectedRef = todo;
       this.showDialog = true;
       this.mode = MODE_EDIT;
     },
@@ -124,6 +127,8 @@ export default {
     handleSave() {
       this.showDialog = false;
       if (this.mode === MODE_EDIT) {
+        this.selectedRef.task = this.selectedTodo.task;
+        this.selectedRef.description = this.selectedTodo.description;
         todosRef.doc(this.$route.params.id).update({ todos: this.list.todos });
       } else {
         this.list.todos.push({
@@ -136,6 +141,7 @@ export default {
         });
       }
       this.selectedTodo = { ...initialTodo };
+      this.selectedRef = { ...initialTodo };
       this.mode = undefined;
     }
   },

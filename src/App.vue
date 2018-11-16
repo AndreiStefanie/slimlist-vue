@@ -3,6 +3,26 @@
     <Drawer/>
     <Header/>
     <v-content>
+      <v-dialog
+        v-if="userLoading"
+        hide-overlay
+        persistent
+        width="300"
+      >
+        <v-card
+          color="blue-grey darken-2"
+          dark
+        >
+          <v-card-text>
+            Getting things ready
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
       <router-view/>
     </v-content>
   </v-app>
@@ -20,7 +40,16 @@ export default {
     Header
   },
   computed: {
-    ...mapGetters({ loggedIn: 'user/loggedIn', user: 'user/user' })
+    ...mapGetters({
+      loggedIn: 'user/loggedIn',
+      user: 'user/user',
+      userLoading: 'user/loading'
+    })
+  },
+  data() {
+    return {
+      dialog: true
+    };
   },
   watch: {
     loggedIn: {
