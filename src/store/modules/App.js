@@ -1,11 +1,13 @@
 export const state = {
   showDrawer: false,
-  dark: false
+  dark: false,
+  focusOpen: false
 };
 
 export const getters = {
   showDrawer: state => state.showDrawer,
-  dark: state => state.dark
+  dark: state => state.dark,
+  focusOpen: state => state.focusOpen
 };
 
 export const mutations = {
@@ -14,5 +16,8 @@ export const mutations = {
   },
   setDark(state, dark) {
     state.dark = dark;
+  },
+  setFocusOpen(state, focus) {
+    state.focusOpen = focus;
   }
 };

@@ -36,13 +36,25 @@
             :src="user.photoURL"
             alt="Avatar"
           >
+          <v-avatar
+            v-else
+            color="blue-grey"
+          >
+            <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
+          </v-avatar>
         </v-avatar>
 
         <v-card>
           <v-list>
             <v-list-tile avatar>
               <v-list-tile-avatar>
-                <img :src="user.photoURL">
+                <img v-if="user.photoURL" :src="user.photoURL">
+                <v-avatar
+                  v-else
+                  color="blue-grey"
+                >
+                  <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
+                </v-avatar>
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title>{{ user.displayName }}</v-list-tile-title>

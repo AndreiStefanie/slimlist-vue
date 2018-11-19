@@ -40,8 +40,18 @@
                 <v-flex xs8>
                   <v-card-title primary-title>
                     <div>
-                      <div class="headline" >{{ t.type }}</div>
-                      <div>{{ getProgress(t) }}</div>
+                      <div class="headline" >
+                        {{ t.type }}
+                        <v-icon
+                          v-if="t.completed"
+                          color="white"
+                        >
+                          check
+                        </v-icon>
+                      </div>
+                      <div>
+                        {{ getProgress(t) }}
+                      </div>
                     </div>
                   </v-card-title>
                 </v-flex>
