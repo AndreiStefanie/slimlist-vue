@@ -225,12 +225,8 @@ export default {
     getNextTodoId() {
       let max = this.list.todos.reduce((t1, t2) => {
         return Math.max(t1.id, t2.id);
-      });
-      if (!max) {
-        return 1;
-      } else {
-        return max + 1;
-      }
+      }, 1);
+      return max + 1;
     }
   },
   computed: {

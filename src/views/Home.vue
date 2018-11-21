@@ -33,37 +33,42 @@
       grid-list-lg
     >
       <v-layout row wrap>
-        <v-flex xs12 v-for="t in todos" :key="t.id">
-          <v-card color="blue-grey darken-2" class="white--text">
-            <router-link :to="`/list/${t.id}`" tag="span" style="cursor:pointer;">
-              <v-layout>
-                <v-flex xs8>
-                  <v-card-title primary-title>
-                    <div>
-                      <div class="headline" >
-                        {{ t.type }}
-                        <v-icon
-                          v-if="t.completed"
-                          color="white"
-                        >
-                          check
-                        </v-icon>
-                      </div>
+        <v-slide-x-transition
+          group
+          class="w-100"
+        >
+          <v-flex xs12 v-for="t in todos" :key="t.id" mb-2>
+            <v-card :color="`${getListColor(t.color)}`" :class="getTextColor(t.color)">
+              <router-link :to="`/list/${t.id}`" tag="span" style="cursor:pointer;">
+                <v-layout>
+                  <v-flex xs8>
+                    <v-card-title primary-title>
                       <div>
-                        {{ getProgress(t) }}
+                        <div class="headline" >
+                          {{ t.type }}
+                          <v-icon
+                            v-if="t.completed"
+                            :color="t.color&&t.color.whiteText?'white':''"
+                          >
+                            check
+                          </v-icon>
+                        </div>
+                        <div>
+                          {{ getProgress(t) }}
+                        </div>
                       </div>
-                    </div>
-                  </v-card-title>
-                </v-flex>
-              </v-layout>
-            </router-link>
-            <v-divider light></v-divider>
-            <v-card-actions class="pa-3 blue-grey darken-3">
-              <span class="mr-2 ml-2"><v-icon color="white" @click="editTodo(t)">edit</v-icon></span>
-              <span class="mr-2 ml-2"><v-icon color="white" @click="deleteTodo(t)">delete</v-icon></span>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
+                    </v-card-title>
+                  </v-flex>
+                </v-layout>
+              </router-link>
+              <v-divider light></v-divider>
+              <v-card-actions :class="getListColor(t.color)" class="pa-3 darken-2">
+                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':''" @click="editTodo(t)">edit</v-icon></span>
+                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':''" @click="deleteTodo(t)">delete</v-icon></span>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-slide-x-transition>
       </v-layout>
     </v-container>
     <v-btn
@@ -91,6 +96,12 @@
                     v-model="selectedTodo.type"
                   ></v-text-field>
                 </v-flex>
+                <v-flex xs12 d-inline-block>
+                  <span style="margin-right: 1rem;">Color:</span>
+                  <color-picker
+                    v-model="selectedColor" ml-2
+                  ></color-picker>
+                </v-flex>
               </v-layout>
             </v-container>
             <small>*indicates required field</small>
@@ -103,18 +114,40 @@
         </v-card>
       </v-dialog>
     </v-layout>
+    <v-snackbar
+      v-model="snackbar"
+      color="blue-grey"
+      vertical
+      :timeout="4000"
+    >
+      The new list will show up in a few moments
+      <v-btn
+        flat
+        @click="snackbar=false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import { db } from '@/plugins/firebase';
+import ColorPicker from '@/components/ColorPicker';
 
 const todos = db.collection('todo-lists');
 
+const defaultColor = {
+  color: 'white',
+  whiteText: false
+};
+
 export default {
   name: 'home',
-  components: {},
+  components: {
+    ColorPicker
+  },
   metaInfo: {
     title: 'Home Page'
   },
@@ -124,7 +157,9 @@ export default {
         type: ''
       },
       showDialog: false,
-      fab: false
+      fab: false,
+      snackbar: false,
+      selectedColor: defaultColor
     };
   },
   computed: {
@@ -147,6 +182,7 @@ export default {
     },
     editTodo(todo) {
       this.selectedTodo = todo;
+      this.selectedColor = todo.color ? todo.color : defaultColor;
       this.showDialog = true;
     },
     deleteTodo(todo) {
@@ -159,19 +195,32 @@ export default {
     handleSave() {
       this.showDialog = false;
       if (this.selectedTodo.id) {
-        todos
-          .doc(this.selectedTodo.id)
-          .update({ type: this.selectedTodo.type });
-      } else {
-        todos.add({
-          completed: false,
+        todos.doc(this.selectedTodo.id).update({
           type: this.selectedTodo.type,
-          owner: this.user.uid,
-          public: false,
-          todos: []
+          color: this.selectedColor
         });
+      } else {
+        todos
+          .add({
+            completed: false,
+            type: this.selectedTodo.type,
+            owner: this.user.uid,
+            public: false,
+            todos: [],
+            color: this.selectedColor
+          })
+          .then(() => {
+            this.snackbar = true;
+          });
       }
       this.selectedTodo = { type: '' };
+      this.selectedColor = defaultColor;
+    },
+    getListColor(colorObj) {
+      return colorObj ? colorObj.color : 'white';
+    },
+    getTextColor(colorObj) {
+      return colorObj && colorObj.whiteText ? 'white--text' : '';
     }
   }
 };
