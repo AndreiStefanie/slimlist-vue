@@ -48,7 +48,7 @@
                           {{ t.type }}
                           <v-icon
                             v-if="t.completed"
-                            :color="t.color&&t.color.whiteText?'white':''"
+                            :color="t.color&&t.color.whiteText?'white':'grey darken-3'"
                           >
                             check
                           </v-icon>
@@ -63,8 +63,8 @@
               </router-link>
               <v-divider light></v-divider>
               <v-card-actions :class="getListColor(t.color)" class="pa-3 darken-2">
-                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':''" @click="editTodo(t)">edit</v-icon></span>
-                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':''" @click="onDelete(t)">delete</v-icon></span>
+                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="editTodo(t)">edit</v-icon></span>
+                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="onDelete(t)">delete</v-icon></span>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -241,7 +241,9 @@ export default {
       return colorObj ? colorObj.color : 'white';
     },
     getTextColor(colorObj) {
-      return colorObj && colorObj.whiteText ? 'white--text' : '';
+      return colorObj && colorObj.whiteText
+        ? 'white--text'
+        : 'grey--text text--darken-3';
     }
   }
 };
