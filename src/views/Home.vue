@@ -64,7 +64,7 @@
               <v-divider light></v-divider>
               <v-card-actions :class="getListColor(t.color)" class="pa-3 darken-2">
                 <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':''" @click="editTodo(t)">edit</v-icon></span>
-                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':''" @click="deleteTodo(t)">delete</v-icon></span>
+                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':''" @click="onDelete(t)">delete</v-icon></span>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -81,7 +81,7 @@
       <v-icon>add</v-icon>
     </v-btn>
     <v-layout row justify-center v-if="!!selectedTodo">
-      <v-dialog v-model="showDialog" persistent max-width="600px">
+      <v-dialog v-model="showDialog" persistent max-width="600px" lazy>
         <v-card>
           <v-card-title>
             <span class="headline">Edit List</span>
@@ -114,6 +114,17 @@
         </v-card>
       </v-dialog>
     </v-layout>
+    <v-dialog v-model="confirmDelete" persistent max-width="285" lazy>
+      <v-card>
+        <v-card-title class="headline">Permanently delete list <strong>{{ selectedTodo.type }}</strong>?</v-card-title>
+        <v-card-text>If you are sure that you want to delete the list, click <strong>Delete</strong>, otherwise click <strong>No</strong>.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click="confirmDelete=false">No</v-btn>
+          <v-btn color="blue-grey white--text" @click="onConfirmDelete">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-snackbar
       v-model="snackbar"
       color="blue-grey"
@@ -159,6 +170,7 @@ export default {
       showDialog: false,
       fab: false,
       snackbar: false,
+      confirmDelete: false,
       selectedColor: defaultColor
     };
   },
@@ -176,6 +188,15 @@ export default {
         return '-';
       }
       return `${todo.todos.filter(t => t.done).length}/${todo.todos.length}`;
+    },
+    onDelete(todo) {
+      this.confirmDelete = true;
+      this.selectedTodo = todo;
+    },
+    onConfirmDelete() {
+      this.confirmDelete = false;
+      this.deleteTodo(this.selectedTodo);
+      this.selectedTodo = { type: '' };
     },
     addTodo() {
       this.showDialog = true;

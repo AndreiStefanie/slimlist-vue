@@ -6,16 +6,6 @@
     <v-toolbar-side-icon @click.native="toggleDrawer"></v-toolbar-side-icon>
     <router-link to="/" tag="span"><span class="title ml-3 mr-5">Slim&nbsp;<span class="font-weight-light">List</span></span></router-link>
     <v-spacer></v-spacer>
-    <v-layout row align-center style="max-width: 600px" class="hidden-sm-and-down" mr-2>
-      <v-text-field
-        solo-inverted
-        prepend-inner-icon="search"
-        flat
-        single-line
-        color="white"
-        hide-details
-      ></v-text-field>
-    </v-layout>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-if="!loggedIn" flat to="/signin">SIGN IN</v-btn>
       <v-menu
@@ -77,7 +67,7 @@
               <v-list-tile-action>
                 <v-switch v-model="dark" color="green"></v-switch>
               </v-list-tile-action>
-              <v-list-tile-title>Dark Theme</v-list-tile-title>
+              <v-list-tile-title>Dark theme</v-list-tile-title>
             </v-list-tile>
           </v-list>
 

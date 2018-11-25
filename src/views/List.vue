@@ -12,7 +12,7 @@
               bottom left
               transition="slide-y-transition"
               offset-y
-              :close-on-content-click="false"
+              close-on-content-click
             >
               <v-btn
                 slot="activator"
@@ -45,7 +45,7 @@
             <v-list-tile-action>
               <v-checkbox
                 v-model="t.done"
-                @change.capture="setDone(t)"
+                @click.stop.prevent="setDone(t)"
                 color="blue-grey"
               ></v-checkbox>
             </v-list-tile-action>
@@ -79,7 +79,7 @@
               <v-list-tile-action>
                 <v-checkbox
                   v-model="t.done"
-                  @change.capture="setDone(index)"
+                  @click.stop.prevent="setDone(t)"
                   color="blue-grey"
                 ></v-checkbox>
               </v-list-tile-action>
@@ -226,6 +226,9 @@ export default {
       let max = this.list.todos.reduce((t1, t2) => {
         return Math.max(t1.id, t2.id);
       }, 1);
+      if (!max) {
+        return 1;
+      }
       return max + 1;
     }
   },
