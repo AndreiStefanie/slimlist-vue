@@ -35,6 +35,7 @@
             :value="progress"
             color="blue-grey"
             height="5px"
+            v-if="list.todos.length>0"
           ></v-progress-linear>
 
           <v-list-tile
