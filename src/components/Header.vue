@@ -3,7 +3,7 @@
     <v-toolbar-side-icon @click.native="toggleDrawer"></v-toolbar-side-icon>
     <router-link to="/" tag="span">
       <span class="title ml-3 mr-5">
-        Slim&nbsp;
+        Slim
         <span class="font-weight-light">List</span>
       </span>
     </router-link>

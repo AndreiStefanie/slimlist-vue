@@ -23,7 +23,7 @@
 
           <v-progress-linear
             :value="progress"
-            color="blue-grey"
+            :color="progressColor"
             height="5px"
             v-if="list.todos.length>0"
           ></v-progress-linear>
@@ -232,6 +232,14 @@ export default {
     },
     progress() {
       return (this.completedTodos / this.list.todos.length) * 100;
+    },
+    progressColor() {
+      const listColor = this.list.color.color;
+      if (listColor === 'white' || listColor === 'black') {
+        return 'blue-grey';
+      } else {
+        return listColor;
+      }
     },
     ...mapGetters({
       user: 'user/user',
