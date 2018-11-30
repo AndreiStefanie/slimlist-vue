@@ -234,6 +234,9 @@ export default {
       return (this.completedTodos / this.list.todos.length) * 100;
     },
     progressColor() {
+      if (!this.list || !this.list.color || !this.list.color.color) {
+        return 'blue-grey';
+      }
       const listColor = this.list.color.color;
       if (listColor === 'white' || listColor === 'black') {
         return 'blue-grey';
