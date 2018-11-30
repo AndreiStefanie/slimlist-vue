@@ -2,30 +2,20 @@
   <v-layout row mt-2>
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
-        <v-list
-          three-line
-        >
+        <v-list three-line>
           <v-subheader>
             <span :class="{ strike: list.completed }">{{ list.type }}</span>
             <v-spacer></v-spacer>
-            <v-menu
-              bottom left
-              transition="slide-y-transition"
-              offset-y
-              close-on-content-click
-            >
-              <v-btn
-                slot="activator"
-                icon
-              >
+            <v-menu bottom left transition="slide-y-transition" offset-y close-on-content-click>
+              <v-btn slot="activator" icon>
                 <v-icon>more_vert</v-icon>
               </v-btn>
               <v-list>
-              <v-list-tile>
-                <v-list-tile-action>
-                  <v-switch v-model="focusOpen" color="blue-grey"></v-switch>
-                </v-list-tile-action>
-                <v-list-tile-title>Focus on open todos</v-list-tile-title>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-switch v-model="focusOpen" color="blue-grey"></v-switch>
+                  </v-list-tile-action>
+                  <v-list-tile-title>Focus on open todos</v-list-tile-title>
                 </v-list-tile>
               </v-list>
             </v-menu>
@@ -38,30 +28,20 @@
             v-if="list.todos.length>0"
           ></v-progress-linear>
 
-          <v-list-tile
-            @click="()=>{}"
-            v-for="(t, index) in mainTodos"
-            :key="index"
-          >
+          <v-list-tile @click="()=>{}" v-for="(t, index) in mainTodos" :key="index">
             <v-list-tile-action>
-              <v-checkbox
-                v-model="t.done"
-                @click.stop.prevent="setDone(t)"
-                color="blue-grey"
-              ></v-checkbox>
+              <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" color="blue-grey"></v-checkbox>
             </v-list-tile-action>
 
-            <v-list-tile-content @click="handleEdit(t)" :class="t.done && 'grey--text' || 'text--primary'">
+            <v-list-tile-content
+              @click="handleEdit(t)"
+              :class="t.done && 'grey--text' || 'text--primary'"
+            >
               <v-list-tile-title>{{ t.task }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-scroll-x-transition>
-              <v-icon
-                v-if="t.done"
-                color="green"
-              >
-                check
-              </v-icon>
+              <v-icon v-if="t.done" color="green">check</v-icon>
             </v-scroll-x-transition>
           </v-list-tile>
         </v-list>
@@ -72,17 +52,9 @@
                 <v-list-tile-sub-title>Done ({{ secondaryTodos.length }})</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile
-              @click="()=>{}"
-              v-for="(t, index) in secondaryTodos"
-              :key="index"
-            >
+            <v-list-tile @click="()=>{}" v-for="(t, index) in secondaryTodos" :key="index">
               <v-list-tile-action>
-                <v-checkbox
-                  v-model="t.done"
-                  @click.stop.prevent="setDone(t)"
-                  color="blue-grey"
-                ></v-checkbox>
+                <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" color="blue-grey"></v-checkbox>
               </v-list-tile-action>
 
               <v-list-tile-content @click="handleEdit(t)">
@@ -90,25 +62,14 @@
                 <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-scroll-x-transition>
-                <v-icon
-                  v-if="t.done"
-                  color="green"
-                >
-                  check
-                </v-icon>
+                <v-icon v-if="t.done" color="green">check</v-icon>
               </v-scroll-x-transition>
             </v-list-tile>
           </v-list-group>
         </v-list>
       </v-card>
     </v-flex>
-    <v-btn
-      color="blue-grey white--text"
-      dark
-      fab
-      bottom right fixed
-      @click="handleAdd"
-    >
+    <v-btn color="blue-grey white--text" dark fab bottom right fixed @click="handleAdd">
       <v-icon>add</v-icon>
     </v-btn>
     <v-layout row justify-center v-if="!!selectedTodo">
@@ -121,11 +82,7 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field
-                    label="What needs to be done*"
-                    required
-                    v-model="selectedTodo.task"
-                  ></v-text-field>
+                  <v-text-field label="What needs to be done*" required v-model="selectedTodo.task"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-textarea
@@ -256,10 +213,15 @@ export default {
     },
     focusOpen: {
       get() {
-        return this.$store.state.app.focusOpen;
+        return this.loggedIn ? this.settings.focusOpen : this.appFocusOpen;
       },
       set(value) {
         this.$store.commit('app/setFocusOpen', value);
+        if (this.loggedIn) {
+          const settings = this.settings;
+          settings.focusOpen = value;
+          this.$store.dispatch('user/setSettings', settings);
+        }
       }
     },
     completedTodos() {
@@ -271,7 +233,12 @@ export default {
     progress() {
       return (this.completedTodos / this.list.todos.length) * 100;
     },
-    ...mapGetters({ user: 'user/user' })
+    ...mapGetters({
+      user: 'user/user',
+      loggedIn: 'user/loggedIn',
+      settings: 'user/settings',
+      appFocusOpen: 'app/focusOpen'
+    })
   },
   firestore() {
     return {

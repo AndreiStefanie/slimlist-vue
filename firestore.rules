@@ -5,5 +5,10 @@ service cloud.firestore {
                             (exists(resource.data.public) && resource.data.public == true);
       allow create: if request.auth.uid != null;
     }
+    match /users/{uid} {
+      allow read, write: if resource == null ||
+      	request.auth.uid == resource.id;
+      allow create: if request.auth.uid != null;
+    }
   }
 }

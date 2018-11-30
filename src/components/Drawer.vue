@@ -7,7 +7,7 @@
   >
     <v-toolbar v-if="loggedIn" flat class="hidden-md-and-up mt-2 mb-2" @click="userDialog=true">
       <v-list class="pa-0">
-        <v-list-tile avatar>
+        <v-list-tile avatar two-line>
           <v-list-tile-avatar>
             <img v-if="user.photoURL" :src="user.photoURL" alt="avatar">
             <v-avatar

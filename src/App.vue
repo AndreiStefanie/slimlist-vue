@@ -1,25 +1,12 @@
 <template>
-  <v-app :dark="$store.state.app.dark">
+  <v-app :dark="dark">
     <Drawer/>
     <Header/>
     <v-content>
-      <v-dialog
-        v-if="userLoading"
-        hide-overlay
-        persistent
-        width="300"
-      >
-        <v-card
-          color="blue-grey darken-2"
-          dark
-        >
-          <v-card-text>
-            Getting things ready
-            <v-progress-linear
-              indeterminate
-              color="white"
-              class="mb-0"
-            ></v-progress-linear>
+      <v-dialog v-if="userLoading" hide-overlay persistent width="300">
+        <v-card color="blue-grey darken-2" dark>
+          <v-card-text>Getting things ready
+            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -40,10 +27,21 @@ export default {
     Header
   },
   computed: {
+    dark: {
+      get() {
+        if (this.loggedIn) {
+          return this.settings.darkTheme;
+        } else {
+          return this.appDark;
+        }
+      }
+    },
     ...mapGetters({
       loggedIn: 'user/loggedIn',
+      appDark: 'app/dark',
       user: 'user/user',
-      userLoading: 'user/loading'
+      userLoading: 'user/loading',
+      settings: 'user/settings'
     })
   },
   data() {

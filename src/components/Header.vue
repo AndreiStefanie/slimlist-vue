@@ -1,10 +1,12 @@
 <template>
-  <v-toolbar
-    app
-    clipped-left
-    scroll-off-screen>
+  <v-toolbar app clipped-left scroll-off-screen>
     <v-toolbar-side-icon @click.native="toggleDrawer"></v-toolbar-side-icon>
-    <router-link to="/" tag="span"><span class="title ml-3 mr-5">Slim&nbsp;<span class="font-weight-light">List</span></span></router-link>
+    <router-link to="/" tag="span">
+      <span class="title ml-3 mr-5">
+        Slim&nbsp;
+        <span class="font-weight-light">List</span>
+      </span>
+    </router-link>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-if="!loggedIn" flat to="/signin">SIGN IN</v-btn>
@@ -18,18 +20,9 @@
         close-on-click
         lazy
       >
-        <v-avatar
-          slot="activator"
-        >
-          <img
-            v-if="user.photoURL"
-            :src="user.photoURL"
-            alt="Avatar"
-          >
-          <v-avatar
-            v-else
-            color="blue-grey"
-          >
+        <v-avatar slot="activator">
+          <img v-if="user.photoURL" :src="user.photoURL" alt="Avatar">
+          <v-avatar v-else color="blue-grey">
             <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
           </v-avatar>
         </v-avatar>
@@ -39,10 +32,7 @@
             <v-list-tile avatar>
               <v-list-tile-avatar>
                 <img v-if="user.photoURL" :src="user.photoURL">
-                <v-avatar
-                  v-else
-                  color="blue-grey"
-                >
+                <v-avatar v-else color="blue-grey">
                   <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
                 </v-avatar>
               </v-list-tile-avatar>
@@ -58,14 +48,7 @@
           <v-list>
             <v-list-tile>
               <v-list-tile-action>
-                <v-switch v-model="hints" color="green"></v-switch>
-              </v-list-tile-action>
-              <v-list-tile-title>Enable hints</v-list-tile-title>
-            </v-list-tile>
-
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-switch v-model="dark" color="green"></v-switch>
+                <v-switch v-model="dark" color="blue-grey"></v-switch>
               </v-list-tile-action>
               <v-list-tile-title>Dark theme</v-list-tile-title>
             </v-list-tile>
@@ -73,7 +56,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" flat @click="logout()">Log out</v-btn>
+            <v-btn color="blue-grey" flat @click="logout()">Log out</v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -92,14 +75,18 @@ export default {
       },
       set(value) {
         this.$store.commit('app/setDark', value);
+        if (this.loggedIn) {
+          const settings = this.settings;
+          settings.darkTheme = value;
+          this.$store.dispatch('user/setSettings', settings);
+        }
       }
     },
-    ...mapGetters({ loggedIn: 'user/loggedIn', user: 'user/user' })
-  },
-  data() {
-    return {
-      hints: false
-    };
+    ...mapGetters({
+      loggedIn: 'user/loggedIn',
+      user: 'user/user',
+      settings: 'user/settings'
+    })
   },
   methods: {
     toggleDrawer() {
