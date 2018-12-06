@@ -23,19 +23,19 @@
 
           <v-progress-linear
             :value="progress"
-            :color="progressColor"
+            :color="accentColor"
             height="5px"
             v-if="list.todos.length>0"
           ></v-progress-linear>
 
           <v-list-tile @click="()=>{}" v-for="(t, index) in mainTodos" :key="index">
             <v-list-tile-action>
-              <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" color="blue-grey"></v-checkbox>
+              <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" :color="accentColor"></v-checkbox>
             </v-list-tile-action>
 
             <v-list-tile-content
               @click="handleEdit(t)"
-              :class="t.done && 'grey--text' || 'text--primary'"
+              :class="t.done ? 'grey--text' : 'text--primary'"
             >
               <v-list-tile-title>{{ t.task }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
@@ -54,10 +54,13 @@
             </v-list-tile>
             <v-list-tile @click="()=>{}" v-for="(t, index) in secondaryTodos" :key="index">
               <v-list-tile-action>
-                <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" color="blue-grey"></v-checkbox>
+                <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" :color="accentColor"></v-checkbox>
               </v-list-tile-action>
 
-              <v-list-tile-content @click="handleEdit(t)">
+              <v-list-tile-content
+                @click="handleEdit(t)"
+                :class="t.done ? 'grey--text' : 'text--primary'"
+              >
                 <v-list-tile-title>{{ t.task }}</v-list-tile-title>
                 <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
               </v-list-tile-content>
@@ -233,7 +236,7 @@ export default {
     progress() {
       return (this.completedTodos / this.list.todos.length) * 100;
     },
-    progressColor() {
+    accentColor() {
       if (!this.list || !this.list.color || !this.list.color.color) {
         return 'blue-grey';
       }
