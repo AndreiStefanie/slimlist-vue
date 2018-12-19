@@ -1,9 +1,15 @@
 <template>
   <v-container v-if="!loggedIn" grid-list-xs fill-height>
     <v-layout row wrap>
-      <div style="margin:auto;">
+      <v-flex xs12 text-xs-center style="margin:auto;">
+        <h2><p>Slim List helps you organize your ideas and tasks while staying out of your way</p></h2>
+      </v-flex>
+      <v-flex xs12 text-xs-center style="margin:auto;">
         <v-btn color="blue-grey white--text" large to="signin">Signin</v-btn>
-      </div>
+      </v-flex>
+      <v-flex xs12 text-xs-center style="margin:auto;">
+        <h4><p>Since it syncs to-dos between all your devices (i.e. all data is stored online), sign in is required</p></h4>
+      </v-flex>
     </v-layout>
   </v-container>
   <div v-else class="w-100">

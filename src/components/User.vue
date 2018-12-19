@@ -15,6 +15,9 @@
       <v-flex xs12 text-xs-center mb-4>
         <v-btn @click.native="signOut">Logout</v-btn>
       </v-flex>
+      <v-divider
+        class="mx-1"
+      ></v-divider>
       <v-flex xs12 text-xs-center mb-4>
         <v-card flat ml-4 pl-4>
           <v-switch label="Dark theme" v-model="darkTheme" color="blue-grey"></v-switch>
