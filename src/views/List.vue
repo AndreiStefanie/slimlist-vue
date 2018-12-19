@@ -28,31 +28,12 @@
             v-if="list.todos.length>0"
           ></v-progress-linear>
 
-          <v-list-tile @click="()=>{}" v-for="(t, index) in mainTodos" :key="index">
-            <v-list-tile-action>
-              <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" :color="accentColor"></v-checkbox>
-            </v-list-tile-action>
-
-            <v-list-tile-content
-              @click="handleEdit(t)"
-              :class="t.done ? 'grey--text' : 'text--primary'"
-            >
-              <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-scroll-x-transition>
-              <v-icon v-if="t.done" color="green">check</v-icon>
-            </v-scroll-x-transition>
-          </v-list-tile>
-        </v-list>
-        <v-list three-line v-if="secondaryTodos.length>0">
-          <v-list-group>
-            <v-list-tile slot="activator">
-              <v-list-tile-content>
-                <v-list-tile-sub-title>Done ({{ secondaryTodos.length }})</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile @click="()=>{}" v-for="(t, index) in secondaryTodos" :key="index">
+          <draggable
+            v-model="mainTodos"
+            @start="drag=true"
+            @end="drag=false"
+          >
+            <v-list-tile @click="()=>{}" v-for="(t, index) in mainTodos" :key="index">
               <v-list-tile-action>
                 <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" :color="accentColor"></v-checkbox>
               </v-list-tile-action>
@@ -68,6 +49,37 @@
                 <v-icon v-if="t.done" color="green">check</v-icon>
               </v-scroll-x-transition>
             </v-list-tile>
+          </draggable>
+        </v-list>
+        <v-list three-line v-if="secondaryTodos.length>0">
+          <v-list-group>
+            <v-list-tile slot="activator">
+              <v-list-tile-content>
+                <v-list-tile-sub-title>Done ({{ secondaryTodos.length }})</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <draggable
+              v-model="secondaryTodos"
+              @start="drag=true"
+              @end="drag=false"
+            >
+              <v-list-tile @click="()=>{}" v-for="(t, index) in secondaryTodos" :key="index">
+                <v-list-tile-action>
+                  <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" :color="accentColor"></v-checkbox>
+                </v-list-tile-action>
+
+                <v-list-tile-content
+                  @click="handleEdit(t)"
+                  :class="t.done ? 'grey--text' : 'text--primary'"
+                >
+                  <v-list-tile-title>{{ t.task }}</v-list-tile-title>
+                  <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+                <v-scroll-x-transition>
+                  <v-icon v-if="t.done" color="green">check</v-icon>
+                </v-scroll-x-transition>
+              </v-list-tile>
+            </draggable>
           </v-list-group>
         </v-list>
       </v-card>
@@ -111,6 +123,7 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
 import { db } from '@/plugins/firebase';
 import { mapGetters } from 'vuex';
 
@@ -129,6 +142,9 @@ export default {
   metaInfo: {
     title: 'Todo List'
   },
+  components: {
+    draggable
+  },
   data() {
     return {
       list: {
@@ -137,15 +153,17 @@ export default {
       selectedTodo: { ...initialTodo },
       selectedRef: { ...initialTodo },
       showDialog: false,
-      mode: undefined
+      mode: undefined,
+      drag: false
     };
   },
   methods: {
+    updateTodos(todos) {
+      todosRef.doc(this.$route.params.id).update({ todos });
+    },
     setDone(todo) {
       todo.done = !todo.done;
-      todosRef.doc(this.$route.params.id).update({
-        todos: this.list.todos
-      });
+      this.updateTodos(this.list.todos);
     },
     handleAdd() {
       this.showDialog = true;
@@ -167,7 +185,7 @@ export default {
       if (this.mode === MODE_EDIT) {
         this.selectedRef.task = this.selectedTodo.task;
         this.selectedRef.description = this.selectedTodo.description;
-        todosRef.doc(this.$route.params.id).update({ todos: this.list.todos });
+        this.updateTodos(this.list.todos);
       } else {
         this.list.todos.push({
           id: this.getNextTodoId(),
@@ -175,9 +193,7 @@ export default {
           task: this.selectedTodo.task,
           description: this.selectedTodo.description
         });
-        todosRef.doc(this.$route.params.id).update({
-          todos: this.list.todos
-        });
+        this.updateTodos(this.list.todos);
       }
       this.selectedTodo = { ...initialTodo };
       this.selectedRef = { ...initialTodo };
@@ -194,24 +210,42 @@ export default {
     }
   },
   computed: {
-    mainTodos() {
-      if (!this.list || !this.list.todos) {
-        return [];
-      }
-      if (this.focusOpen) {
-        return this.list.todos.filter(t => !t.done);
-      } else {
-        return this.list.todos;
+    mainTodos: {
+      get() {
+        if (!this.list || !this.list.todos) {
+          return [];
+        }
+        if (this.focusOpen) {
+          return this.list.todos.filter(t => !t.done);
+        } else {
+          return this.list.todos;
+        }
+      },
+      set(todos) {
+        if (this.focusOpen) {
+          this.updateTodos(todos.concat(this.secondaryTodos));
+        } else {
+          this.updateTodos(todos);
+        }
       }
     },
-    secondaryTodos() {
-      if (!this.list || !this.list.todos) {
-        return [];
-      }
-      if (this.focusOpen) {
-        return this.list.todos.filter(t => !!t.done);
-      } else {
-        return [];
+    secondaryTodos: {
+      get() {
+        if (!this.list || !this.list.todos) {
+          return [];
+        }
+        if (this.focusOpen) {
+          return this.list.todos.filter(t => !!t.done);
+        } else {
+          return [];
+        }
+      },
+      set(todos) {
+        if (this.focusOpen) {
+          this.updateTodos(this.mainTodos.concat(todos));
+        } else {
+          this.updateTodos(todos);
+        }
       }
     },
     focusOpen: {

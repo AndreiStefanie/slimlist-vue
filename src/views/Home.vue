@@ -30,46 +30,41 @@
     <v-container
       fluid
       mt-2
-      grid-list-lg
+      grid-list-md
     >
-      <v-layout row wrap>
-        <v-slide-x-transition
-          group
-          class="w-100"
-        >
-          <v-flex xs12 v-for="t in todos" :key="t.id" mb-2>
-            <v-card :color="`${getListColor(t.color)}`" :class="getTextColor(t.color)">
-              <router-link :to="`/list/${t.id}`" tag="span" style="cursor:pointer;">
-                <v-layout>
-                  <v-flex xs8>
-                    <v-card-title primary-title>
-                      <div>
-                        <div class="headline" >
-                          {{ t.type }}
-                          <v-icon
-                            v-if="t.completed"
-                            :color="t.color&&t.color.whiteText?'white':'grey darken-3'"
-                          >
-                            check
-                          </v-icon>
-                        </div>
-                        <div>
-                          {{ getProgress(t) }}
-                        </div>
+      <transition-group name="slide-x-transition" tag="div" class="layout row wrap">
+        <v-flex xs12 lg6 xl4 v-for="t in todos" :key="t.id" mb-2>
+          <v-card :color="`${getListColor(t.color)}`" :class="getTextColor(t.color)">
+            <router-link :to="`/list/${t.id}`" tag="span" style="cursor:pointer;">
+              <v-layout>
+                <v-flex xs8>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline" >
+                        {{ t.type }}
+                        <v-icon
+                          v-if="t.completed"
+                          :color="t.color&&t.color.whiteText?'white':'grey darken-3'"
+                        >
+                          check
+                        </v-icon>
                       </div>
-                    </v-card-title>
-                  </v-flex>
-                </v-layout>
-              </router-link>
-              <v-divider light></v-divider>
-              <v-card-actions :class="getListColor(t.color)" class="pa-3 darken-2">
-                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="editTodo(t)">edit</v-icon></span>
-                <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="onDelete(t)">delete</v-icon></span>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-slide-x-transition>
-      </v-layout>
+                      <div>
+                        {{ getProgress(t) }}
+                      </div>
+                    </div>
+                  </v-card-title>
+                </v-flex>
+              </v-layout>
+            </router-link>
+            <v-divider light></v-divider>
+            <v-card-actions :class="getListColor(t.color)" class="pa-3 darken-2">
+              <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="editTodo(t)">edit</v-icon></span>
+              <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="onDelete(t)">delete</v-icon></span>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </transition-group>
     </v-container>
     <v-btn
       color="blue-grey white--text"
