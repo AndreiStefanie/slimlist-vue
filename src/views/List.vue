@@ -30,6 +30,7 @@
 
           <draggable
             v-model="mainTodos"
+            :options="{touchStartThreshold: 50, delay: 200}"
             @start="drag=true"
             @end="drag=false"
           >
@@ -60,6 +61,7 @@
             </v-list-tile>
             <draggable
               v-model="secondaryTodos"
+              :options="{touchStartThreshold: 50, delay: 200}"
               @start="drag=true"
               @end="drag=false"
             >

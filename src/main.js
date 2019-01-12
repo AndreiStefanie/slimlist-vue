@@ -5,9 +5,8 @@ import store from './store';
 import { i18n } from './i18n';
 import '@/registerServiceWorker';
 import '@/plugins/vuetify';
-import '@/plugins/reactive-cookie';
 import '@/plugins/firebase';
-import 'vuetify/dist/vuetify.min.css';
+import 'vuetify/src/stylus/app.styl';
 
 Vue.config.productionTip = false;
 
