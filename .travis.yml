@@ -3,6 +3,9 @@ node_js:
   - '10'
 script:
   - npm run build
+after_script:
+  - cd ./functions && npm install && cd ..
+cache: npm
 deploy:
   skip_cleanup: true
   provider: firebase
