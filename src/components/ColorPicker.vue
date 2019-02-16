@@ -9,13 +9,31 @@
       z-index="500"
     >
       <v-avatar :color="value.color" slot="activator">
-        <span :class="{'white--text': value.whiteText, 'grey--text text--darken-3': !value.whiteText}" class="text-capitalize">{{ value.color }}</span>
+        <span
+          :class="{
+            'white--text': value.whiteText,
+            'grey--text text--darken-3': !value.whiteText
+          }"
+          class="text-capitalize"
+          >{{ value.color }}</span
+        >
       </v-avatar>
 
       <v-layout row wrap ml-2 mt-2>
         <v-flex v-for="c in colorSet" :key="c.color" xs2 mb-1>
-          <v-avatar :color="c.color" @click="$emit('input', c)" :style="{ cursor: 'pointer'}">
-            <span :class="{'white--text': c.whiteText, 'grey--text text--darken-3': !c.whiteText}" class="text-capitalize">{{ c.color }}</span>
+          <v-avatar
+            :color="c.color"
+            @click="$emit('input', c)"
+            :style="{ cursor: 'pointer' }"
+          >
+            <span
+              :class="{
+                'white--text': c.whiteText,
+                'grey--text text--darken-3': !c.whiteText
+              }"
+              class="text-capitalize"
+              >{{ c.color }}</span
+            >
           </v-avatar>
         </v-flex>
       </v-layout>

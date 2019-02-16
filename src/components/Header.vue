@@ -21,9 +21,11 @@
         lazy
       >
         <v-avatar slot="activator">
-          <img v-if="user.photoURL" :src="user.photoURL" alt="Avatar">
+          <img v-if="user.photoURL" :src="user.photoURL" alt="Avatar" />
           <v-avatar v-else color="blue-grey">
-            <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
+            <span class="white--text headline text-uppercase">{{
+              user.displayName.charAt(0)
+            }}</span>
           </v-avatar>
         </v-avatar>
 
@@ -31,9 +33,11 @@
           <v-list>
             <v-list-tile avatar>
               <v-list-tile-avatar>
-                <img v-if="user.photoURL" :src="user.photoURL">
+                <img v-if="user.photoURL" :src="user.photoURL" />
                 <v-avatar v-else color="blue-grey">
-                  <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
+                  <span class="white--text headline text-uppercase">{{
+                    user.displayName.charAt(0)
+                  }}</span>
                 </v-avatar>
               </v-list-tile-avatar>
               <v-list-tile-content>

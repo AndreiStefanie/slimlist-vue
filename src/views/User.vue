@@ -1,5 +1,5 @@
 <template>
-  <User/>
+  <User />
 </template>
 
 <script>

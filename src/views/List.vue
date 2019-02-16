@@ -6,7 +6,13 @@
           <v-subheader>
             <span :class="{ strike: list.completed }">{{ list.type }}</span>
             <v-spacer></v-spacer>
-            <v-menu bottom left transition="slide-y-transition" offset-y close-on-content-click>
+            <v-menu
+              bottom
+              left
+              transition="slide-y-transition"
+              offset-y
+              close-on-content-click
+            >
               <v-btn slot="activator" icon>
                 <v-icon>more_vert</v-icon>
               </v-btn>
@@ -25,18 +31,26 @@
             :value="progress"
             :color="accentColor"
             height="5px"
-            v-if="list.todos.length>0"
+            v-if="list.todos.length > 0"
           ></v-progress-linear>
 
           <draggable
             v-model="mainTodos"
-            :options="{touchStartThreshold: 50, delay: 200}"
-            @start="drag=true"
-            @end="drag=false"
+            :options="{ touchStartThreshold: 50, delay: 200 }"
+            @start="drag = true"
+            @end="drag = false"
           >
-            <v-list-tile @click="()=>{}" v-for="(t, index) in mainTodos" :key="index">
+            <v-list-tile
+              @click="() => {}"
+              v-for="(t, index) in mainTodos"
+              :key="index"
+            >
               <v-list-tile-action>
-                <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" :color="accentColor"></v-checkbox>
+                <v-checkbox
+                  v-model="t.done"
+                  @click.stop.prevent="setDone(t)"
+                  :color="accentColor"
+                ></v-checkbox>
               </v-list-tile-action>
 
               <v-list-tile-content
@@ -44,7 +58,9 @@
                 :class="t.done ? 'grey--text' : 'text--primary'"
               >
                 <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{
+                  t.description
+                }}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-scroll-x-transition>
                 <v-icon v-if="t.done" color="green">check</v-icon>
@@ -52,22 +68,32 @@
             </v-list-tile>
           </draggable>
         </v-list>
-        <v-list three-line v-if="secondaryTodos.length>0">
+        <v-list three-line v-if="secondaryTodos.length > 0">
           <v-list-group>
             <v-list-tile slot="activator">
               <v-list-tile-content>
-                <v-list-tile-sub-title>Done ({{ secondaryTodos.length }})</v-list-tile-sub-title>
+                <v-list-tile-sub-title
+                  >Done ({{ secondaryTodos.length }})</v-list-tile-sub-title
+                >
               </v-list-tile-content>
             </v-list-tile>
             <draggable
               v-model="secondaryTodos"
-              :options="{touchStartThreshold: 50, delay: 200}"
-              @start="drag=true"
-              @end="drag=false"
+              :options="{ touchStartThreshold: 50, delay: 200 }"
+              @start="drag = true"
+              @end="drag = false"
             >
-              <v-list-tile @click="()=>{}" v-for="(t, index) in secondaryTodos" :key="index">
+              <v-list-tile
+                @click="() => {}"
+                v-for="(t, index) in secondaryTodos"
+                :key="index"
+              >
                 <v-list-tile-action>
-                  <v-checkbox v-model="t.done" @click.stop.prevent="setDone(t)" :color="accentColor"></v-checkbox>
+                  <v-checkbox
+                    v-model="t.done"
+                    @click.stop.prevent="setDone(t)"
+                    :color="accentColor"
+                  ></v-checkbox>
                 </v-list-tile-action>
 
                 <v-list-tile-content
@@ -75,7 +101,9 @@
                   :class="t.done ? 'grey--text' : 'text--primary'"
                 >
                   <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{ t.description }}</v-list-tile-sub-title>
+                  <v-list-tile-sub-title>{{
+                    t.description
+                  }}</v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-scroll-x-transition>
                   <v-icon v-if="t.done" color="green">check</v-icon>
@@ -86,7 +114,15 @@
         </v-list>
       </v-card>
     </v-flex>
-    <v-btn color="blue-grey white--text" dark fab bottom right fixed @click="handleAdd">
+    <v-btn
+      color="blue-grey white--text"
+      dark
+      fab
+      bottom
+      right
+      fixed
+      @click="handleAdd"
+    >
       <v-icon>add</v-icon>
     </v-btn>
     <v-layout row justify-center v-if="!!selectedTodo">
@@ -99,7 +135,11 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="What needs to be done*" required v-model="selectedTodo.task"></v-text-field>
+                  <v-text-field
+                    label="What needs to be done*"
+                    required
+                    v-model="selectedTodo.task"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-textarea
@@ -116,7 +156,9 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn flat @click.native="handleClose">Close</v-btn>
-            <v-btn color="blue-grey white--text" @click.native="handleSave">Save</v-btn>
+            <v-btn color="blue-grey white--text" @click.native="handleSave"
+              >Save</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>

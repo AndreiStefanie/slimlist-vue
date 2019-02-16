@@ -18,10 +18,6 @@ export default app;
 
 const db = app.firestore();
 
-db.settings({
-  timestampsInSnapshots: true
-});
-
 db.enablePersistence().catch(err => {
   if (err.code == 'failed-precondition') {
     // Multiple tabs open, persistence can only be enabled

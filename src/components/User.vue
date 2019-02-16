@@ -3,9 +3,11 @@
     <v-layout v-if="loggedIn" wrap row>
       <v-flex xs12 d-flex mb-4>
         <v-avatar size="128" style="margin:auto;">
-          <img v-if="user.photoURL" :src="user.photoURL" alt="avatar">
+          <img v-if="user.photoURL" :src="user.photoURL" alt="avatar" />
           <v-avatar v-else size="128" color="blue-grey">
-            <span class="white--text headline text-uppercase">{{ user.displayName.charAt(0) }}</span>
+            <span class="white--text headline text-uppercase">{{
+              user.displayName.charAt(0)
+            }}</span>
           </v-avatar>
         </v-avatar>
       </v-flex>
@@ -15,12 +17,14 @@
       <v-flex xs12 text-xs-center mb-4>
         <v-btn @click.native="signOut">Logout</v-btn>
       </v-flex>
-      <v-divider
-        class="mx-1"
-      ></v-divider>
+      <v-divider class="mx-1"></v-divider>
       <v-flex xs12 text-xs-center mb-4>
         <v-card flat ml-4 pl-4>
-          <v-switch label="Dark theme" v-model="darkTheme" color="blue-grey"></v-switch>
+          <v-switch
+            label="Dark theme"
+            v-model="darkTheme"
+            color="blue-grey"
+          ></v-switch>
         </v-card>
       </v-flex>
     </v-layout>

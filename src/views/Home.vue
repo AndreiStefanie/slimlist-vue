@@ -2,27 +2,29 @@
   <v-container v-if="!loggedIn" grid-list-xs fill-height>
     <v-layout row wrap>
       <v-flex xs12 text-xs-center style="margin:auto;">
-        <h2><p>Slim List helps you organize your ideas and tasks while staying out of your way</p></h2>
+        <h2>
+          <p>
+            Slim List helps you organize your ideas and tasks while staying out
+            of your way
+          </p>
+        </h2>
       </v-flex>
       <v-flex xs12 text-xs-center style="margin:auto;">
         <v-btn color="blue-grey white--text" large to="signin">Signin</v-btn>
       </v-flex>
       <v-flex xs12 text-xs-center style="margin:auto;">
-        <h4><p>Since it syncs to-dos between all your devices (i.e. all data is stored online), sign in is required</p></h4>
+        <h4>
+          <p>
+            Since it syncs to-dos between all your devices (i.e. all data is
+            stored online), sign in is required
+          </p>
+        </h4>
       </v-flex>
     </v-layout>
   </v-container>
   <div v-else class="w-100">
-    <v-dialog
-      hide-overlay
-      persistent
-      width="300"
-      v-if="!loaded"
-    >
-      <v-card
-        color="blue-grey darken-2"
-        dark
-      >
+    <v-dialog hide-overlay persistent width="300" v-if="!loaded">
+      <v-card color="blue-grey darken-2" dark>
         <v-card-text>
           Getting things ready
           <v-progress-linear
@@ -33,24 +35,35 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-container
-      fluid
-      mt-2
-      grid-list-md
-    >
-      <transition-group name="slide-x-transition" tag="div" class="layout row wrap">
+    <v-container fluid mt-2 grid-list-md>
+      <transition-group
+        name="slide-x-transition"
+        tag="div"
+        class="layout row wrap"
+      >
         <v-flex xs12 lg6 xl4 v-for="t in todos" :key="t.id" mb-2>
-          <v-card :color="`${getListColor(t.color)}`" :class="getTextColor(t.color)">
-            <router-link :to="`/list/${t.id}`" tag="span" style="cursor:pointer;">
+          <v-card
+            :color="`${getListColor(t.color)}`"
+            :class="getTextColor(t.color)"
+          >
+            <router-link
+              :to="`/list/${t.id}`"
+              tag="span"
+              style="cursor:pointer;"
+            >
               <v-layout>
                 <v-flex xs8>
                   <v-card-title primary-title>
                     <div>
-                      <div class="headline" >
+                      <div class="headline">
                         {{ t.type }}
                         <v-icon
                           v-if="t.completed"
-                          :color="t.color&&t.color.whiteText?'white':'grey darken-3'"
+                          :color="
+                            t.color && t.color.whiteText
+                              ? 'white'
+                              : 'grey darken-3'
+                          "
                         >
                           check
                         </v-icon>
@@ -64,9 +77,28 @@
               </v-layout>
             </router-link>
             <v-divider light></v-divider>
-            <v-card-actions :class="getListColor(t.color)" class="pa-3 darken-2">
-              <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="editTodo(t)">edit</v-icon></span>
-              <span class="mr-2 ml-2"><v-icon :color="t.color&&t.color.whiteText?'white':'grey darken-3'" @click="onDelete(t)">delete</v-icon></span>
+            <v-card-actions
+              :class="getListColor(t.color)"
+              class="pa-3 darken-2"
+            >
+              <span class="mr-2 ml-2"
+                ><v-icon
+                  :color="
+                    t.color && t.color.whiteText ? 'white' : 'grey darken-3'
+                  "
+                  @click="editTodo(t)"
+                  >edit</v-icon
+                ></span
+              >
+              <span class="mr-2 ml-2"
+                ><v-icon
+                  :color="
+                    t.color && t.color.whiteText ? 'white' : 'grey darken-3'
+                  "
+                  @click="onDelete(t)"
+                  >delete</v-icon
+                ></span
+              >
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -76,7 +108,9 @@
       color="blue-grey white--text"
       dark
       fab
-      bottom right fixed
+      bottom
+      right
+      fixed
       @click="addTodo"
     >
       <v-icon>add</v-icon>
@@ -99,9 +133,7 @@
                 </v-flex>
                 <v-flex xs12 d-inline-block>
                   <span style="margin-right: 1rem;">Color:</span>
-                  <color-picker
-                    v-model="selectedColor" ml-2
-                  ></color-picker>
+                  <color-picker v-model="selectedColor" ml-2></color-picker>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -110,33 +142,36 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn flat @click.native="handleClose">Close</v-btn>
-            <v-btn color="blue-grey white--text" @click.native="handleSave">Save</v-btn>
+            <v-btn color="blue-grey white--text" @click.native="handleSave"
+              >Save</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-layout>
     <v-dialog v-model="confirmDelete" persistent max-width="285" lazy>
       <v-card>
-        <v-card-title class="headline">Permanently delete list <strong>{{ selectedTodo.type }}</strong>?</v-card-title>
-        <v-card-text>If you are sure that you want to delete the list, click <strong>Delete</strong>, otherwise click <strong>No</strong>.</v-card-text>
+        <v-card-title class="headline"
+          >Permanently delete list <strong>{{ selectedTodo.type }}</strong
+          >?</v-card-title
+        >
+        <v-card-text
+          >If you are sure that you want to delete the list, click
+          <strong>Delete</strong>, otherwise click
+          <strong>No</strong>.</v-card-text
+        >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat @click="confirmDelete=false">No</v-btn>
-          <v-btn color="blue-grey white--text" @click="onConfirmDelete">Delete</v-btn>
+          <v-btn flat @click="confirmDelete = false">No</v-btn>
+          <v-btn color="blue-grey white--text" @click="onConfirmDelete"
+            >Delete</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="snackbar"
-      color="blue-grey"
-      vertical
-      :timeout="4000"
-    >
+    <v-snackbar v-model="snackbar" color="blue-grey" vertical :timeout="4000">
       The new list will show up in a few moments
-      <v-btn
-        flat
-        @click="snackbar=false"
-      >
+      <v-btn flat @click="snackbar = false">
         Close
       </v-btn>
     </v-snackbar>

@@ -4,17 +4,22 @@ import 'firebase/auth';
 import Vue from 'vue';
 import { firebaseAction } from 'vuexfire';
 
+const LOCAL_USER_KEY = 'authUser';
+const LOCAL_USER_SETTINGS = 'userSettings';
+
 const Auth = firebaseApp.auth();
 
 let userRef;
 
-const defaultSettings = {
+const defaultSettings = JSON.parse(
+  localStorage.getItem(LOCAL_USER_SETTINGS)
+) || {
   darkTheme: false,
   focusOpen: false
 };
 
 export const state = {
-  user: undefined,
+  user: JSON.parse(localStorage.getItem(LOCAL_USER_KEY)) || undefined,
   loading: false,
   settings: undefined
 };
@@ -47,12 +52,17 @@ export const actions = {
     Auth.onAuthStateChanged(user => {
       if (user) {
         commit('setUser', user);
+        localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
         db.collection('users')
           .doc(user.uid)
           .get()
           .then(doc => {
             if (doc.exists) {
               userRef = doc.ref;
+              localStorage.setItem(
+                LOCAL_USER_SETTINGS,
+                JSON.stringify(doc.data())
+              );
               commit('app/setDark', doc.data().darkTheme, { root: true });
               commit('app/setFocusOpen', doc.data().focusOpen, { root: true });
             } else {
@@ -64,19 +74,18 @@ export const actions = {
             dispatch('setUserRef', userRef);
           });
       } else {
+        localStorage.removeItem(LOCAL_USER_KEY);
         commit('setUser', undefined);
       }
       commit('setLoading', false);
-    });
-    Auth.onIdTokenChanged(() => {
-      commit('setLoading', true);
     });
   },
   signOut() {
     Auth.signOut();
   },
-  setSettings(context, settings) {
+  setSettings(_context, settings) {
     userRef.set(settings, { merge: true });
+    localStorage.setItem(LOCAL_USER_SETTINGS, JSON.stringify(settings));
   },
   setUserRef
 };
