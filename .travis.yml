@@ -1,13 +1,16 @@
 language: node_js
 node_js:
-  - '10'
+- '10'
+before_script:
+- cd ./functions && npm install && cd ..
 script:
-  - npm run build
-after_script:
-  - cd ./functions && npm install && cd ..
+- npm run build
 cache: npm
 deploy:
   skip_cleanup: true
   provider: firebase
   token:
     secure: TNy/7qeiMlXg40zyd0TMxRXrKLMsQYbbzUeFOwAp3Un584eHBC241RFQGyiWRBaixZBfiUT3CN7ryiGZf+363L+ZFeCaNSXZywKcrgJx0evRFX+BX/LA++C4lgugB5GHqnLpyhP7eAxsJoCnwZIgmJIUQc4Q4l2GSM/LEtrNwYdMd1AA9Um+9p507YGteVxdcbBE+8dcAD71h98jpMWEGaH58by7ZXFG4RmE3vaJTe1mRcBCOxeesM98hB6te6PUxLW1BPZlqMgI/U/fsNAemz617SGy24l1DHwRKGOuMD6Oj4msla+TiT4cuEnKX3hcs3Wc6aUMKmUgN1EX3dlG35fmxcykpeAHDpAbBHC4/5VrWALcoBfOVD+uuWyUK7VoKJUF+xT8+ayg8JUQI/6aHfhHJ8G38QeFahLvaSs5qIK93kU8dDtvMKjiflIIjHFgYNvkLpfg+XFWB2muw5YNRPxLNebndIndyOmUgj1mf1utXVNLpgbajy8Xl7FXAvl2Ab26S2EYksSPAfbxNu0VKMYxxM1aukOPF3dQFZu1DCa930AEEzEF8+VMmBeY64NKXnvETQzi7Yrd4LPO+YGotwuAv9wV095Y+W51iuZcrTeqHseneGVcAbIxhfJppWY2vlObL5UchdE8fKz7YwR7eQ64v33LJg7QEfJRE49W+lw=
+env:
+  global:
+    secure: AIS5QDZhbVmX36Ujb0BfPExYvy0xdwKFQ/SVZV8uK80TmL8sRubZtAD4wsWQ9HDqRjnM+5fsqtq5c+IJcHDZEVNw+gjJaYw/3JScK6P4USbSP3avAVEx22cbUfmLoMeMpYVf9nURgE9Rr7xo2C9p4KK/ZIjrzQftcrezRPLHKeH+/EedsCnSphVBJ7imXCNdXypjFuSOkr79/NZJWzo+ytt3lav5ABytWcQs873raHwWMegbiNF7Ba9yhyD4IvDVgQOGGOeYqC5rc0P0nN1tLfxaLhVk2tw+I7tWm6p6+CKzSxI8KZAETrqVlpWvtrijPvMNDRmD3afepjnRXIUSlkWTDWfAkhziTd35aBps8I0bXS0dpXGaCi4UWtv1w+Hl/6wKvDmsby8OIFE/lMe7YVNM3NmA8Cyb4RfVTmUxDrs/2+fuqMZnCYe/eUC0kd712qNnppBTZMdEzlQluZeObKtQwpPuC9YO67vMYe3klD6Yh3efwQdxUxkobqVX/Wc8tkKkyYOPXi3IxWxicOpkhwEl9MUYXTHH8i1A00bZfRt+6zgx5wWpdb7u+LSlPLsT7bQDqLtR7Y7ZzXYY3582gL7NY7KeJmGFGs/1DWrb6huwzFZJm4T8HJCcWRm4AfRxMFH86oA837KoV+/zxv9aH/i6lMbeeuQ0ywdo8VPpWN8=
