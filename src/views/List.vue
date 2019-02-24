@@ -58,9 +58,9 @@
                 :class="t.done ? 'grey--text' : 'text--primary'"
               >
                 <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{
-                  t.description
-                }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title>
+                  {{ t.description }}
+                </v-list-tile-sub-title>
               </v-list-tile-content>
               <v-scroll-x-transition>
                 <v-icon v-if="t.done" color="green">check</v-icon>
@@ -101,9 +101,9 @@
                   :class="t.done ? 'grey--text' : 'text--primary'"
                 >
                   <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{
-                    t.description
-                  }}</v-list-tile-sub-title>
+                  <v-list-tile-sub-title>
+                    {{ t.description }}
+                  </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-scroll-x-transition>
                   <v-icon v-if="t.done" color="green">check</v-icon>
@@ -136,7 +136,7 @@
               <v-layout wrap>
                 <v-flex xs12>
                   <v-text-field
-                    label="What needs to be done*"
+                    label="What needs to be done"
                     required
                     v-model="selectedTodo.task"
                   ></v-text-field>
@@ -151,7 +151,6 @@
                 </v-flex>
               </v-layout>
             </v-container>
-            <small>*indicates required field</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -191,9 +190,7 @@ export default {
   },
   data() {
     return {
-      list: {
-        todos: []
-      },
+      listId: undefined,
       selectedTodo: { ...initialTodo },
       selectedRef: { ...initialTodo },
       showDialog: false,
@@ -254,6 +251,15 @@ export default {
     }
   },
   computed: {
+    list() {
+      if (this.listId) {
+        return (
+          this.todos.find(t => t.id === this.listId) || {
+            todos: []
+          }
+        );
+      }
+    },
     mainTodos: {
       get() {
         if (!this.list || !this.list.todos) {
@@ -329,20 +335,16 @@ export default {
       user: 'user/user',
       loggedIn: 'user/loggedIn',
       settings: 'user/settings',
-      appFocusOpen: 'app/focusOpen'
+      appFocusOpen: 'app/focusOpen',
+      todos: 'todo/lists'
     })
-  },
-  firestore() {
-    return {
-      list: todosRef.doc(this.$route.params.id)
-    };
   },
   watch: {
     $route: {
-      immediate: false,
+      immediate: true,
       handler(newRoute) {
-        if (this.user) {
-          this.$bind('list', todosRef.doc(newRoute.params.id));
+        if (newRoute.name === 'list') {
+          this.listId = newRoute.params.id;
         }
       }
     },

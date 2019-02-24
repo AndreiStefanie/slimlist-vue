@@ -1,5 +1,3 @@
-import Vue from 'vue';
-import VueFire from 'vuefire';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
@@ -11,8 +9,6 @@ const config = {
 };
 
 const app = firebase.initializeApp(config);
-
-Vue.use(VueFire);
 
 export default app;
 

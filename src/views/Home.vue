@@ -119,14 +119,14 @@
       <v-dialog v-model="showDialog" persistent max-width="600px" lazy>
         <v-card>
           <v-card-title>
-            <span class="headline">Edit List</span>
+            <span class="headline">List</span>
           </v-card-title>
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
                   <v-text-field
-                    label="List Name*"
+                    label="List Name"
                     required
                     v-model="selectedTodo.type"
                   ></v-text-field>
@@ -137,7 +137,6 @@
                 </v-flex>
               </v-layout>
             </v-container>
-            <small>*indicates required field</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -248,6 +247,7 @@ export default {
     handleClose() {
       this.showDialog = false;
       this.selectedTodo = { type: '' };
+      this.selectedColor = defaultColor;
     },
     handleSave() {
       this.showDialog = false;
