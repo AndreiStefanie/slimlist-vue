@@ -2,7 +2,7 @@ import firebaseApp from '@/plugins/firebase';
 import { db } from '@/plugins/firebase';
 import 'firebase/auth';
 import Vue from 'vue';
-import { firebaseAction } from 'vuexfire';
+import { firestoreAction } from 'vuexfire';
 
 const LOCAL_USER_KEY = 'authUser';
 const LOCAL_USER_SETTINGS = 'userSettings';
@@ -40,8 +40,8 @@ export const mutations = {
   }
 };
 
-const setUserRef = firebaseAction(({ bindFirebaseRef, commit }, ref) => {
-  bindFirebaseRef('settings', ref).then(snapshot => {
+const setUserRef = firestoreAction(({ bindFirestoreRef, commit }, ref) => {
+  bindFirestoreRef('settings', ref).then(snapshot => {
     commit('app/setDark', snapshot.darkTheme, { root: true });
     commit('app/setFocusOpen', snapshot.focusOpen, { root: true });
   });

@@ -1,4 +1,4 @@
-import { firebaseAction } from 'vuexfire';
+import { firestoreAction } from 'vuexfire';
 
 export const state = {
   lists: [],
@@ -11,8 +11,8 @@ export const mutations = {
   }
 };
 
-const setTodosRef = firebaseAction(({ bindFirebaseRef, commit }, ref) => {
-  bindFirebaseRef('lists', ref).then(() => {
+const setTodosRef = firestoreAction(({ bindFirestoreRef, commit }, ref) => {
+  bindFirestoreRef('lists', ref).then(() => {
     commit('setTodosLoaded', true);
   });
 });
