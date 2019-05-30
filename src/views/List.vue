@@ -36,7 +36,7 @@
 
           <draggable
             v-model="mainTodos"
-            :options="{ touchStartThreshold: 50, delay: 200 }"
+            v-bind="{ touchStartThreshold: 50, delay: 200 }"
             @start="drag = true"
             @end="drag = false"
           >
@@ -58,9 +58,9 @@
                 :class="t.done ? 'grey--text' : 'text--primary'"
               >
                 <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                <v-list-tile-sub-title>
-                  {{ t.description }}
-                </v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{
+                  t.description
+                }}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-scroll-x-transition>
                 <v-icon v-if="t.done" color="green">check</v-icon>
@@ -79,7 +79,7 @@
             </v-list-tile>
             <draggable
               v-model="secondaryTodos"
-              :options="{ touchStartThreshold: 50, delay: 200 }"
+              v-bind="{ touchStartThreshold: 50, delay: 500 }"
               @start="drag = true"
               @end="drag = false"
             >
@@ -101,9 +101,9 @@
                   :class="t.done ? 'grey--text' : 'text--primary'"
                 >
                   <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                  <v-list-tile-sub-title>
-                    {{ t.description }}
-                  </v-list-tile-sub-title>
+                  <v-list-tile-sub-title>{{
+                    t.description
+                  }}</v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-scroll-x-transition>
                   <v-icon v-if="t.done" color="green">check</v-icon>

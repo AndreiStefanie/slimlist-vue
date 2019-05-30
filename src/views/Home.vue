@@ -168,12 +168,12 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-snackbar v-model="snackbar" color="blue-grey" vertical :timeout="4000">
+    <!-- <v-snackbar v-model="snackbar" color="blue-grey" vertical :timeout="4000">
       The new list will show up in a few moments
       <v-btn flat @click="snackbar = false">
         Close
       </v-btn>
-    </v-snackbar>
+    </v-snackbar> -->
   </div>
 </template>
 
@@ -181,6 +181,7 @@
 import { mapGetters } from 'vuex';
 import { db } from '@/plugins/firebase';
 import ColorPicker from '@/components/ColorPicker';
+import { firestore } from 'firebase/app';
 
 const todos = db.collection('todo-lists');
 
@@ -264,7 +265,8 @@ export default {
             owner: this.user.uid,
             public: false,
             todos: [],
-            color: this.selectedColor
+            color: this.selectedColor,
+            createdAt: firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
             this.snackbar = true;
