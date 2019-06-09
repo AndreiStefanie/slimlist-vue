@@ -40,32 +40,14 @@
             @start="drag = true"
             @end="drag = false"
           >
-            <v-list-tile
-              @click="() => {}"
+            <item
               v-for="(t, index) in mainTodos"
               :key="index"
-            >
-              <v-list-tile-action>
-                <v-checkbox
-                  v-model="t.done"
-                  @click.stop.prevent="setDone(t)"
-                  :color="accentColor"
-                ></v-checkbox>
-              </v-list-tile-action>
-
-              <v-list-tile-content
-                @click="handleEdit(t)"
-                :class="t.done ? 'grey--text' : 'text--primary'"
-              >
-                <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{
-                  t.description
-                }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-scroll-x-transition>
-                <v-icon v-if="t.done" color="green">check</v-icon>
-              </v-scroll-x-transition>
-            </v-list-tile>
+              :item="t"
+              :accent-color="accentColor"
+              @edit-item="handleEdit(t)"
+              @set-done="setDone(t)"
+            />
           </draggable>
         </v-list>
         <v-list three-line v-if="secondaryTodos.length > 0">
@@ -83,32 +65,14 @@
               @start="drag = true"
               @end="drag = false"
             >
-              <v-list-tile
-                @click="() => {}"
+              <item
                 v-for="(t, index) in secondaryTodos"
                 :key="index"
-              >
-                <v-list-tile-action>
-                  <v-checkbox
-                    v-model="t.done"
-                    @click.stop.prevent="setDone(t)"
-                    :color="accentColor"
-                  ></v-checkbox>
-                </v-list-tile-action>
-
-                <v-list-tile-content
-                  @click="handleEdit(t)"
-                  :class="t.done ? 'grey--text' : 'text--primary'"
-                >
-                  <v-list-tile-title>{{ t.task }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{
-                    t.description
-                  }}</v-list-tile-sub-title>
-                </v-list-tile-content>
-                <v-scroll-x-transition>
-                  <v-icon v-if="t.done" color="green">check</v-icon>
-                </v-scroll-x-transition>
-              </v-list-tile>
+                :item="t"
+                :accent-color="accentColor"
+                @edit-item="handleEdit(t)"
+                @set-done="setDone(t)"
+              />
             </draggable>
           </v-list-group>
         </v-list>
@@ -121,45 +85,18 @@
       bottom
       right
       fixed
-      @click="handleAdd"
+      @click.stop="handleAdd"
     >
       <v-icon>add</v-icon>
     </v-btn>
     <v-layout row justify-center v-if="!!selectedTodo">
-      <v-dialog v-model="showDialog" persistent max-width="600px">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Todo</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-text-field
-                    label="What needs to be done"
-                    required
-                    v-model="selectedTodo.task"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-textarea
-                    label="More details"
-                    rows="1"
-                    auto-grow
-                    v-model="selectedTodo.description"
-                  ></v-textarea>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn flat @click.native="handleClose">Close</v-btn>
-            <v-btn color="blue-grey white--text" @click.native="handleSave"
-              >Save</v-btn
-            >
-          </v-card-actions>
-        </v-card>
+      <v-dialog lazy v-model="showDialog" persistent max-width="600px">
+        <item-form
+          v-if="showDialog"
+          v-model="selectedTodo"
+          @close="handleClose"
+          @save="handleSave"
+        />
       </v-dialog>
     </v-layout>
   </v-layout>
@@ -169,6 +106,8 @@
 import draggable from 'vuedraggable';
 import { db } from '@/plugins/firebase';
 import { mapGetters } from 'vuex';
+import item from '@/components/Item';
+import itemForm from '@/components/ItemForm';
 
 const todosRef = db.collection('todo-lists');
 
@@ -186,7 +125,9 @@ export default {
     title: 'Todo List'
   },
   components: {
-    draggable
+    draggable,
+    item,
+    itemForm
   },
   data() {
     return {

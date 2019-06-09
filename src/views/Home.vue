@@ -86,7 +86,7 @@
                   :color="
                     t.color && t.color.whiteText ? 'white' : 'grey darken-3'
                   "
-                  @click="editTodo(t)"
+                  @click.stop="editTodo(t)"
                   >edit</v-icon
                 ></span
               >
@@ -95,7 +95,7 @@
                   :color="
                     t.color && t.color.whiteText ? 'white' : 'grey darken-3'
                   "
-                  @click="onDelete(t)"
+                  @click.stop="onDelete(t)"
                   >delete</v-icon
                 ></span
               >
@@ -117,7 +117,7 @@
     </v-btn>
     <v-layout row justify-center v-if="!!selectedTodo">
       <v-dialog v-model="showDialog" persistent max-width="600px" lazy>
-        <v-card>
+        <v-card v-if="showDialog">
           <v-card-title>
             <span class="headline">List</span>
           </v-card-title>
@@ -127,6 +127,7 @@
                 <v-flex xs12>
                   <v-text-field
                     label="List Name"
+                    autofocus
                     required
                     v-model="selectedTodo.type"
                   ></v-text-field>
@@ -168,12 +169,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- <v-snackbar v-model="snackbar" color="blue-grey" vertical :timeout="4000">
-      The new list will show up in a few moments
-      <v-btn flat @click="snackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar> -->
   </div>
 </template>
 
